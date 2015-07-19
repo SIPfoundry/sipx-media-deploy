@@ -1,0 +1,3 @@
+[submodule "sipx-media"]
+	path = sipx-media
+	url = https://github.com/sipfoundrydev/sipx-media
