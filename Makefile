@@ -1,6 +1,6 @@
 PROJECTVER=15.06-stage
 DISTRO=x86_64
-REPOHOST = stage.sipfoundry.org
+REPOHOST = localhost
 REPOUSER = stage
 PACKAGE = media
 REPOPATH = /var/stage/www-root/sipxecs/${PROJECTVER}/${PACKAGE}/CentOS_6/${DISTRO}/
