@@ -3,7 +3,7 @@ DISTRO=x86_64
 REPOHOST = stage.sipfoundry.org
 REPOUSER = stage
 PACKAGE = media
-REPOPATH = /home/stage/www-root/sipxecs/${PROJECTVER}/${PACKAGE}/CentOS_6/${DISTRO}/
+REPOPATH = /var/stage/www-root/sipxecs/${PROJECTVER}/${PACKAGE}/CentOS_6/${DISTRO}/
 RPMPATH = RPMBUILD/RPMS/${DISTRO}/*.rpm
 SSH_OPTIONS = -o UserKnownHostsFile=./.known_hosts -o StrictHostKeyChecking=no
 SCP_PARAMS = ${RPMPATH} ${REPOUSER}@${REPOHOST}:${REPOPATH}
