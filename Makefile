@@ -24,8 +24,8 @@ rpm-dir:
 	
 
 configure: rpm-dir
-	cd sipx-${PACKAGE}; autoreconf -if
-	cd RPMBUILD/DIST; ../../sipx-${PACKAGE}/configure --prefix=`pwd`--enable-rpm
+	cd sipX${PACKAGE}; autoreconf -if
+	cd RPMBUILD/DIST; ../../sipX${PACKAGE}/configure --prefix=`pwd`--enable-rpm
 
 dist: configure
 	cd RPMBUILD/DIST; \
@@ -62,6 +62,5 @@ deploy:
 
 docker-build:
 	docker pull ${CONTAINER}; \
-	docker run -t --name sipx-${PACKAGE}-builder  -v `pwd`:/BUILD ${CONTAINER} \
+	docker run -t --rm --name sipx-${PACKAGE}-builder  -v `pwd`:/BUILD ${CONTAINER} \
 		/bin/sh -c "cd /BUILD && yum update -y && make"; \
-	docker rm sipx-${PACKAGE}-builder
