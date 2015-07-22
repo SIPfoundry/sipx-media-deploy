@@ -1,4 +1,4 @@
-box: sipfoundrydev/sipx-docker-router-libs:latest
+box: sipfoundrydev/sipx-docker-config-libs:latest
 no-response-timeout: 10
 command-timeout: 120
 build:
