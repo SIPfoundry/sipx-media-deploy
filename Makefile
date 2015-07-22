@@ -1,6 +1,6 @@
 PROJECTVER=15.06-stage
 DISTRO=x86_64
-REPOHOST = localhost
+REPOHOST = stage.ossapp.com
 REPOUSER = stage
 PACKAGE = media
 REPOPATH = /var/stage/www-root/sipxecs/${PROJECTVER}/${PACKAGE}/CentOS_6/${DISTRO}/
@@ -9,6 +9,7 @@ SSH_OPTIONS = -o UserKnownHostsFile=./.known_hosts -o StrictHostKeyChecking=no
 SCP_PARAMS = ${RPMPATH} ${REPOUSER}@${REPOHOST}:${REPOPATH}
 CREATEREPO_PARAMS = ${REPOUSER}@${REPOHOST} createrepo ${REPOPATH}
 MKDIR_PARAMS = ${REPOUSER}@${REPOHOST} mkdir -p ${REPOPATH}
+RM_PARAMS = ${REPOUSER}@${REPOHOST} rm -rf ${REPOPATH}/*
 CONTAINER = sipfoundrydev/sipx-docker-config-libs:latest
 
 MODULES = \
@@ -51,6 +52,7 @@ deploy:
 	if [[ $$? -ne 0 ]]; then \
 		exit 1; \
 	fi; \
+	ssh ${SSH_OPTIONS} ${RM_PARAMS}; \
 	scp ${SSH_OPTIONS} -r ${SCP_PARAMS}; \
 	if [[ $$? -ne 0 ]]; then \
 		exit 1; \
