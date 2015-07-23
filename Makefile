@@ -3,7 +3,8 @@ DISTRO=x86_64
 REPOHOST = stage.sipfoundry.org
 REPOUSER = stage
 PACKAGE = media
-REPOPATH = /var/stage/www-root/sipxecs/${PROJECTVER}/${PACKAGE}/CentOS_6/${DISTRO}/
+WWWROOT = /var/stage/www-root
+REPOPATH = ${WWWROOT}/sipxecs/${PROJECTVER}/${PACKAGE}/CentOS_6/${DISTRO}/
 RPMPATH = RPMBUILD/RPMS/${DISTRO}/*.rpm
 SSH_OPTIONS = -o UserKnownHostsFile=./.known_hosts -o StrictHostKeyChecking=no
 SCP_PARAMS = ${RPMPATH} ${REPOUSER}@${REPOHOST}:${REPOPATH}
@@ -15,7 +16,7 @@ CONTAINER = sipfoundrydev/sipx-docker-config-libs:latest
 MODULES = \
 	sipXprompts \
 	sipXivr \
-        sipXrecording
+	sipXrecording
 
 all: rpm
 
@@ -65,4 +66,27 @@ deploy:
 docker-build:
 	docker pull ${CONTAINER}; \
 	docker run -t --rm --name sipx-${PACKAGE}-builder  -v `pwd`:/BUILD ${CONTAINER} \
-		/bin/sh -c "cd /BUILD && yum update -y && make"; \
+		/bin/sh -c "cd /BUILD && yum update -y && make";
+
+prepare-repo:
+	rm -f /etc/yum.repos.d/sipx*; \
+	echo "[sipx-baselibs]" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "name=sipXecs custom packages for CentOS releasever - basearch" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "baseurl=file:///WWWROOT/sipxecs/15.06-stage/externals/CentOS_6/x86_64" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "gpgcheck=0" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "[sipx-router]" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "name=sipXecs custom packages for CentOS releasever - basearch" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "baseurl=file:///WWWROOT/sipxecs/15.06-stage/router/CentOS_6/x86_64" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "gpgcheck=0" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "[sipx-config]" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "name=sipXecs custom packages for CentOS releasever - basearch" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "baseurl=file:///WWWROOT/sipxecs/15.06-stage/config/CentOS_6/x86_64" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "gpgcheck=0" >> /etc/yum.repos.d/sipxecs.repo; \
+	echo "" >> /etc/yum.repos.d/sipxecs.repo;
+                        
+docker-build-local:
+	docker pull sipfoundrydev/sipx-docker-router-libs; \
+	docker run -t -p 80 --rm --name sipx-config-builder  -v `pwd`:/BUILD -v ${WWWROOT}:/WWWROOT ${CONTAINER} \
+	/bin/sh -c "cd /BUILD && make prepare-repo && yum update -y && make"
