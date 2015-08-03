@@ -16,7 +16,8 @@ CONTAINER = sipfoundrydev/sipx-docker-config-libs:latest
 MODULES = \
 	sipXprompts \
 	sipXivr \
-	sipXrecording
+	sipXrecording \
+	sipXacccode
 
 all: rpm
 
