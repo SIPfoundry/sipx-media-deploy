@@ -87,6 +87,6 @@ prepare-repo:
 	echo "" >> /etc/yum.repos.d/sipxecs.repo;
                         
 docker-build-local:
-	docker pull sipfoundrydev/sipx-docker-router-libs; \
-	docker run -t -p 80 --rm --name sipx-config-builder  -v `pwd`:/BUILD -v ${WWWROOT}:/WWWROOT ${CONTAINER} \
+	docker pull ${CONTAINER}; \
+	docker run -t  --rm --name sipx-${PACKAGE}-builder  -v `pwd`:/BUILD -v ${WWWROOT}:/WWWROOT ${CONTAINER} \
 	/bin/sh -c "cd /BUILD && make prepare-repo && yum update -y && make"
